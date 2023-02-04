@@ -1,0 +1,20 @@
+diff --git a/lutris/command.py b/lutris/command.py
+index 22eda7be..cc61d6e6 100644
+--- a/lutris/command.py
++++ b/lutris/command.py
+@@ -133,7 +133,14 @@ class MonitoredCommand:
+         """Returns the calculated environment for the child process."""
+         env = os.environ.copy()
+         env.update(self.env)
+-        return env
++        return self.remove_null_values(environment=env)
++    
++    def remove_null_values(self, environment):
++        return {
++            key: self.remove_null_values(value) if isinstance(value, dict) else value
++            for key, value in environment.items()
++            if value != None
++        }
+ 
+     def start(self):
+         """Run the thread."""
